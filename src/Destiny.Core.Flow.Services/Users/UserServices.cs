@@ -1,4 +1,5 @@
 ﻿using Destiny.Core.Flow.Dtos;
+using Destiny.Core.Flow.Dtos.Users;
 using Destiny.Core.Flow.Entity;
 using Destiny.Core.Flow.Enums;
 using Destiny.Core.Flow.Events.EventBus;
@@ -11,6 +12,7 @@ using Destiny.Core.Flow.Model.Entities.Identity;
 using Destiny.Core.Flow.Services.Users.Events;
 using Destiny.Core.Flow.Ui;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -43,20 +45,23 @@ namespace Destiny.Core.Flow.Services
             dto.NotNull(nameof(dto));
             var passwordHash = dto.PasswordHash;
             var user = dto.MapTo<User>();
-            return await _unitOfWork.UseTranAsync(async () =>
-            {
-                var result = passwordHash.IsNullOrEmpty() ? await _userManager.CreateAsync(user) : await _userManager.CreateAsync(user, passwordHash);
-                if (!result.Succeeded)
-                {
-                    return result.ToOperationResponse();
-                }
+            var result = passwordHash.IsNullOrEmpty() ? await _userManager.CreateAsync(user) : await _userManager.CreateAsync(user, passwordHash);
 
-                if (dto.RoleIds.Any() == true)
-                {
-                    return await this.SetUserRoles(user, dto.RoleIds);
-                }
-                return new OperationResponse("添加用户成功", OperationResponseType.Success);
-            });
+            return result.ToOperationResponse("保存用户成功");
+            //return await _unitOfWork.UseTranAsync(async () =>
+            //{
+            //    var result = passwordHash.IsNullOrEmpty() ? await _userManager.CreateAsync(user) : await _userManager.CreateAsync(user, passwordHash);
+            //    if (!result.Succeeded)
+            //    {
+            //        return result.ToOperationResponse();
+            //    }
+
+            //    if (dto.RoleIds.Any() == true)
+            //    {
+            //        return await this.SetUserRoles(user, dto.RoleIds);
+            //    }
+            //    return new OperationResponse("添加用户成功", OperationResponseType.Success);
+            //});
         }
 
         public async Task<OperationResponse> AllocationRoleAsync(UserAllocationRoleInputDto dto)
@@ -130,23 +135,9 @@ namespace Destiny.Core.Flow.Services
             dto.NotNull(nameof(dto));
             var user = await _userManager.FindByIdAsync(dto.Id.ToString());
             user = dto.MapTo(user);
-            return await _unitOfWork.UseTranAsync(async () =>
-            {
-                var result = await _userManager.UpdateAsync(user);
-                if (!result.Succeeded)
-                {
-                    return result.ToOperationResponse();
-                }
-
-                if (dto.RoleIds?.Any() == true)
-                {
-                    return await this.SetUserRoles(user, dto.RoleIds, false);
-                }
-                else
-                {
-                    return await this.DeleteUserRoleAsync(user);
-                }
-            });
+            var result = await _userManager.UpdateAsync(user);
+            return result.ToOperationResponse("保存用户成功");
+           
         }
 
         /// <summary>
@@ -196,6 +187,31 @@ namespace Destiny.Core.Flow.Services
             OrderCondition<User>[] orderConditions = new OrderCondition<User>[] { new OrderCondition<User>(o => o.CreatedTime, SortDirection.Descending) };
             request.OrderConditions = orderConditions;
             return _userManager.Users.AsNoTracking().ToPageAsync<User, UserOutputPageListDto>(request);
+        }
+
+        /// <summary>
+        /// 异步得到所有用户
+        /// </summary>
+        /// <returns></returns>
+        public async Task<OperationResponse<List<UserOutputListDto>>> GetUsersAsync()
+        {
+            var users = await _userManager.Users.AsNoTracking().ToOutput<UserOutputListDto>().ToListAsync();
+
+            return OperationResponse<List<UserOutputListDto>>.Ok("得到用户成功", users);
+        }
+        /// <summary>
+        /// 得到所有用户并转成下拉
+        /// </summary>
+        /// <returns></returns>
+        public async Task<OperationResponse<IEnumerable<SelectListItem>>> GetUsersToSelectListItemAsync()
+        {
+            var users = await _userManager.Users.AsNoTracking().Select(r => new SelectListItem
+            {
+                Value = r.Id.ToString().ToLower(),
+                Text = r.UserName,
+                Selected = false,
+            }).ToListAsync();
+            return new OperationResponse<IEnumerable<SelectListItem>>("得到数据成功", users, OperationResponseType.Success);
         }
     }
 }

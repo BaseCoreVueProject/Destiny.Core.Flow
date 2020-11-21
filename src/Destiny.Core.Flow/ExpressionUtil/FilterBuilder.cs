@@ -4,6 +4,7 @@ using Destiny.Core.Flow.Extensions;
 using Destiny.Core.Flow.Filter;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -14,8 +15,43 @@ namespace Destiny.Core.Flow.ExpressionUtil
     /// <summary>
     /// 过滤器构建器
     /// </summary>
-    public static class FilterBuilder
+    public class FilterBuilder
     {
+
+        public static Func<FilterOperator, Expression, Expression, Expression> GetOperateExpression=(operate,member,expression)=>{
+
+            switch (operate)
+            {
+                case FilterOperator.Equal:
+                    return Expression.Equal(member, expression);
+
+                case FilterOperator.NotEqual:
+                    return Expression.NotEqual(member, expression);
+
+                case FilterOperator.GreaterThan:
+                    return Expression.GreaterThan(member, expression);
+
+                case FilterOperator.GreaterThanOrEqual:
+                    return Expression.GreaterThanOrEqual(member, expression);
+
+                case FilterOperator.LessThan:
+                    return Expression.LessThan(member, expression);
+
+                case FilterOperator.LessThanOrEqual:
+                    return Expression.LessThanOrEqual(member, expression);
+
+                case FilterOperator.Like:
+                    return Like(member, expression);
+                case FilterOperator.In:
+                    return (member as MemberExpression).In(expression);
+                default:
+                    throw new AppException($"此{operate}过滤条件不存在！！！");
+
+            }
+
+
+        };
+            
         /// <summary>
         /// 得到表达式目录树
         /// </summary>
@@ -64,7 +100,7 @@ namespace Destiny.Core.Flow.ExpressionUtil
 
             var lambda = GetPropertyLambdaExpression(param, filter);
             var constant = ChangeTypeToExpression(filter, lambda.Body.Type);
-
+          
             return GetOperateExpression(filter.Operator, lambda.Body, constant);
 
         }
@@ -81,6 +117,12 @@ namespace Destiny.Core.Flow.ExpressionUtil
         {
             var constant = Expression.Constant(true);
 
+            if (filter.Operator == FilterOperator.In)
+            {
+
+                return Expression.Constant(filter.Value);
+            }
+
             var value = filter.Value.AsTo(conversionType);
             if (value == null)
             {
@@ -89,36 +131,7 @@ namespace Destiny.Core.Flow.ExpressionUtil
 
             return Expression.Constant(value, conversionType);
         }
-        private static Expression GetOperateExpression(FilterOperator operate, Expression member, Expression expression)
-        {
-            switch (operate)
-            {
-                case FilterOperator.Equal:
-                    return Expression.Equal(member, expression);
 
-                case FilterOperator.NotEqual:
-                    return Expression.NotEqual(member, expression);
-
-                case FilterOperator.GreaterThan:
-                    return Expression.GreaterThan(member, expression);
-
-                case FilterOperator.GreaterThanOrEqual:
-                    return Expression.GreaterThanOrEqual(member, expression);
-
-                case FilterOperator.LessThan:
-                    return Expression.LessThan(member, expression);
-
-                case FilterOperator.LessThanOrEqual:
-                    return Expression.LessThanOrEqual(member, expression);
-
-                case FilterOperator.Like:
-
-                    return Like(member, expression);
-                default:
-                    throw new AppException($"此{operate}过滤条件不存在！！！");
-
-            }
-        }
 
 
         private static Expression Like(Expression member, Expression expression)
@@ -150,4 +163,6 @@ namespace Destiny.Core.Flow.ExpressionUtil
             return Expression.Lambda(propertyAccess, parameter);
         }
     }
+
+
 }

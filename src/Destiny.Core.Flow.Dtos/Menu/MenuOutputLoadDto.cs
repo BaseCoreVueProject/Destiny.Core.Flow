@@ -14,7 +14,7 @@ namespace Destiny.Core.Flow.Dtos.Menu
     {
         public MenuOutputLoadDto()
         {
-            FunctionIds = new Guid[] { };
+         
         }
 
         /// <summary>
@@ -59,10 +59,10 @@ namespace Destiny.Core.Flow.Dtos.Menu
         [DisplayName("菜单图标")]
         public string Icon { get; set; }
 
-        /// <summary>
-        /// 功能Id
-        /// </summary>
-        public Guid[] FunctionIds { get; set; }
+        ///// <summary>
+        ///// 功能Id
+        ///// </summary>
+        //public Guid[] FunctionIds { get; set; }
 
         /// <summary>
         /// 当前菜单以上所有的父级
@@ -78,5 +78,24 @@ namespace Destiny.Core.Flow.Dtos.Menu
 
         [DisplayName("类型")]
         public MenuEnum Type { get; set; }
+
+        /// <summary>
+        /// 模板页
+        /// </summary>
+        [DisplayName("模板页")]
+        public string Layout { get; set; }
+
+
+        /// <summary>
+        /// 是否隐藏
+        /// </summary>
+        [DisplayName("是否隐藏")]
+        public bool IsHide { get; set; }
+
+        /// <summary>
+        /// 事件名
+        /// </summary>
+        [DisplayName("事件名")]
+        public string EventName { get; set; }
     }
 }

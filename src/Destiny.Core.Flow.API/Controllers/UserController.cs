@@ -1,5 +1,6 @@
 ﻿using Destiny.Core.Flow.AspNetCore.Api;
 using Destiny.Core.Flow.AspNetCore.Ui;
+using Destiny.Core.Flow.Audit;
 using Destiny.Core.Flow.Dtos;
 using Destiny.Core.Flow.Filter;
 using Destiny.Core.Flow.IServices;
@@ -17,7 +18,7 @@ namespace Destiny.Core.Flow.API.Controllers
     /// </summary>
     [Description("用户管理")]
 
-    public class UserController : AuthorizeControllerBase
+    public class UserController : AdminControllerBase
     {
 
         private readonly IUserServices _userService = null;
@@ -109,24 +110,18 @@ namespace Destiny.Core.Flow.API.Controllers
         {
             return (await _userService.AllocationRoleAsync(dto)).ToAjaxResult();
         }
+        /// <summary>
+        ///获取所有用户列表
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Description("获取所有用户列表")]
 
-        ///// <summary>
-        /////异步添加或更新
-        ///// </summary>
-        ///// <param name="dto"></param>
-        ///// <returns></returns>
-        //[HttpPost]
-        //[Description("异步添加或更新")]
-
-        //public async Task<AjaxResult> AddOrUpdateAsync([FromBody]UserInputDto dto)
-        //{
-
-        //    //if (dto.Id == Guid.Empty)
-        //    //{
-        //    //    return (await _userService.CreateAsync(dto)).ToAjaxResult();
-        //    //}
-        //    //return (await _userService.UpdateAsync(dto)).ToAjaxResult();
-        //}
+        public async Task<AjaxResult> GetUsersToSelectListItemAsync()
+        {
+            return (await _userService.GetUsersToSelectListItemAsync()).ToAjaxResult();
+        }
 
         /// <summary>
         /// 异步得到分页
@@ -138,6 +133,20 @@ namespace Destiny.Core.Flow.API.Controllers
         public async Task<PageList<UserOutputPageListDto>> GetUserPageAsync([FromBody] PageRequest request)
         {
             return (await _userService.GetUserPageAsync(request)).ToPageList();
+
+        }
+        /// <summary>
+        /// 异步得到所有用户
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Description("异步得到所有用户")]
+        [NoAuthorityVerification]
+        [DisableAuditing]
+        public async Task<AjaxResult> GetUsersAsync()
+        {
+
+            return (await _userService.GetUsersAsync()).ToAjaxResult();
         }
     }
 }

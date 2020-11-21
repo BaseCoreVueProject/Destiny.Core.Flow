@@ -1,5 +1,8 @@
 ﻿using Destiny.Core.Flow.Dtos.Organization;
+using Destiny.Core.Flow.Enums;
 using Destiny.Core.Flow.Extensions;
+using Destiny.Core.Flow.Filter;
+using Destiny.Core.Flow.Filter.Abstract;
 using Destiny.Core.Flow.IServices.Organization;
 using Destiny.Core.Flow.Model.Entities.Organizational;
 using Destiny.Core.Flow.Repository.OrganizationRepository;
@@ -64,6 +67,18 @@ namespace Destiny.Core.Flow.Services.Organization
             //};
 
             return list;
+        }
+        public async Task<IPagedResult<OrganizationOutPageListDto>> GetPageOrganizationAsync(PageRequest request)
+        {
+            request.NotNull(nameof(request));
+            OrderCondition<OrganizatedEntity>[] orderConditions = new OrderCondition<OrganizatedEntity>[] { new OrderCondition<OrganizatedEntity>(o => o.CreatedTime, SortDirection.Descending) };
+            request.OrderConditions = orderConditions;
+            return await _organizated.Entities.ToPageAsync<OrganizatedEntity, OrganizationOutPageListDto>(request);
+        }
+        public async Task<OperationResponse<OrganizationOutputLoadDto>> LoadFormOrganizationAsync(Guid id)
+        {
+            var dto = (await _organizated.GetByIdAsync(id))?.MapTo<OrganizationOutputLoadDto>();
+            return new OperationResponse<OrganizationOutputLoadDto>(MessageDefinitionType.LoadSucces, dto, OperationResponseType.Success);
         }
     }
 }

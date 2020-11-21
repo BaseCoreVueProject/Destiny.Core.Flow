@@ -1,24 +1,29 @@
 # Destiny.Core.Flow模块化快速开发框架
 ![.NET Core](https://github.com/DestinyCore/Destiny.Core.Flow/workflows/.NET%20Core/badge.svg)  [![Front](https://img.shields.io/badge/Front-React-d.svg)](#) [![sdk](https://img.shields.io/badge/sdk-3.1-d.svg)](#)  [![License MIT](https://img.shields.io/badge/license-Apache-blue.svg?style=flat-square)](https://github.com/anjoy8/Blog.Core/blob/master/LICENSE) [![Language](https://img.shields.io/badge/language-csharp-d.svg)](#) [![博客园](https://img.shields.io/badge/博客园-微微Kawhi-brightgreen.svg)](https://www.cnblogs.com/pual13/)
 
-**Destiny.Core.Flow是一个基于`.net core3.1`平台轻量级的模块化开发框架Admin管理应用框架，旨在提升团队的快速开发输出能力，由常用公共操作类（工具类、帮助类）、分层架构基类，第三方组件封装等组成。**
+**Destiny.Core.Flow是一个基于`.net core3.1`平台轻量级的模块化开发框架Admin管理应用框架，旨在提升团队的快速开发输出能力，由常用公共操作类（工具类、帮助类）、分层架构基类，第三方组件封装等组成。
+Destiny.Core.Flow重写微软的identity用户角色和重写IDS4的实体，以及IDS4的查询仓库实现，将IDS4和Identity以及其他模块合并成为一个上下文，在使用IDS4时不需要在维护几个上下文，统一了上下文管理。
+框架lambda查询不需要在后台写各种判断，所有的查询条件通过前端传入，从而减少后台的一些字符段判断等，使用动态拼接lambda。**
 + ## 在线地址
 
-✔ [在线展示](http://admin.destinycore.club)（这版本目前没法使用（后面再维护），VUE版本正在开发。。。）
+✔ [在线展示](http://admin.destinycore.club)
 
 账号Test002    123456
  
-✔ 后面支持VUE版本
 
-✔ [在线展示后端API链接](http://api.destinycore.club)
+✔ [在线展示后端API链接](http://api.destinycore.club) 
+
+✔ [VUE版本]
+ 
+ https://github.com/DestinyCore/Destiny.Core.Flow.WebUI
 
 + ## 关联前端
 
-✔ [关联前端项目链接](https://github.com/DestinyCore/destiny-admin-flow-umi)
+✔ [关联前端项目链接](https://github.com/DestinyCore/Destiny.Core.Flow.WebUI)
 
 + ## 采用技术栈
 
-  ![](https://wangzewei.oss-cn-beijing.aliyuncs.com/imges/20200902204528.png)
+  ![](https://wangzewei.oss-cn-beijing.aliyuncs.com/imges/20201109171810.png)
 
 + ## 1.框架功能
 
@@ -122,6 +127,7 @@
     + #### Destiny.Core.Flow.SwaggerUI 模块
     
     + #### Destiny.Core.Flow.MongoDB 模块
+      注意MongoDB链接 mongodb://127.0.0.2/Test
       集成MongoDB分页查询，添加，更新，删除。实现MongoDB单独仓储
 + ## 3.框架技术
 
@@ -149,7 +155,7 @@
 
     + #### EntityFrameworkCore ORM框架
 
-    + ### MongoDB 
+    + ### MongoDB 切记MongoDB链接 mongodb://127.0.0.2/Test
     + ### Redis 
 
   + 

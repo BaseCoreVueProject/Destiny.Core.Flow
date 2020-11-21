@@ -1,5 +1,6 @@
 ﻿using Destiny.Core.Flow.AspNetCore.Api;
 using Destiny.Core.Flow.AspNetCore.Ui;
+using Destiny.Core.Flow.Audit;
 using Destiny.Core.Flow.Dtos.Menu;
 using Destiny.Core.Flow.Dtos.MenuFunction;
 using Destiny.Core.Flow.Filter;
@@ -18,7 +19,7 @@ namespace Destiny.Core.Flow.API.Controllers.Menu
     /// </summary>
     [Description("菜单管理")]
     
-    public class MenuController : AuthorizeControllerBase
+    public class MenuController : AdminControllerBase
     {
         private readonly IMenuServices _menuServices;
         private readonly IMenuFunctionServices _menuFunctionServices;
@@ -66,7 +67,7 @@ namespace Destiny.Core.Flow.API.Controllers.Menu
         /// <returns></returns>
         [HttpPost]
         [Description("添加菜单")]
-        [NoAuthorityVerification]
+
         public async Task<AjaxResult> AddMenuAsync([FromBody] MenuInputDto dto)
         {
             return (await _menuServices.CreateAsync(dto)).ToAjaxResult();
@@ -119,15 +120,16 @@ namespace Destiny.Core.Flow.API.Controllers.Menu
         }
 
         /// <summary>
-        /// 登录成功之后获取用户菜单树
+        /// 登录成功之后获取Vue动态路由菜单
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Description("登录成功之后获取用户菜单树")]
+        [Description("获取Vue动态路由菜单")]
         [NoAuthorityVerification]
-        public async Task<AjaxResult> GetUserMenuTreeAsync()
+        [DisableAuditing]
+        public async Task<AjaxResult> GetVueDynamicRouterTreeAsync()
         {
-            return (await _menuServices.GetUserMenuTreeAsync()).ToAjaxResult();
+            return (await _menuServices.GetVueDynamicRouterTreeAsync()).ToAjaxResult();
         }
 
         /// <summary>
@@ -168,17 +170,7 @@ namespace Destiny.Core.Flow.API.Controllers.Menu
             return (await _menuServices.GetMenuListAsync()).ToAjaxResult();
         }
 
-        /// <summary>
-        /// 异步到菜单功能集合
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Description("异步到菜单功能集合")]
-
-        public async Task<PageList<MenuFunctionOutPageListDto>> GetMenuFunctionListAsync(Guid id)
-        {
-            return (await _menuFunctionServices.GetMenuFunctionListAsync(id)).ToPageList();
-        }
+      
 
         /// <summary>
         /// 异步得到菜单分页数据（不是树，只是普通表格）

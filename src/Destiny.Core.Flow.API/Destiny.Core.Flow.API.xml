@@ -129,7 +129,7 @@
             <param name="id">主键</param>
             <returns></returns>
         </member>
-        <member name="M:Destiny.Core.Flow.API.Controllers.FunctionController.GetFunctionPageAsync(Destiny.Core.Flow.Filter.PageRequest)">
+        <member name="M:Destiny.Core.Flow.API.Controllers.FunctionController.GetFunctionPageAsync(Destiny.Core.Flow.Dtos.Functions.FunctionPageRequestDto)">
             <summary>
             异步得到功能分页
             </summary>
@@ -168,7 +168,7 @@
         </member>
         <member name="M:Destiny.Core.Flow.API.Controllers.IdentityController.LoginAsync(Destiny.Core.Flow.Dtos.LoginDto)">
             <summary>
-            登录
+            现在用不上。。现在用IDS4登录
             </summary>
             <param name="loginDto"></param>
             <returns></returns>
@@ -178,6 +178,32 @@
             更新密码
             </summary>
             <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Destiny.Core.Flow.API.Controllers.MenuFunctionController">
+            <summary>
+            菜单功能
+            </summary>
+        </member>
+        <member name="M:Destiny.Core.Flow.API.Controllers.MenuFunctionController.BatchAddMenuFunctionAsync(Destiny.Core.Flow.Dtos.MenuFunction.BatchAddMenuFunctionInputDto)">
+            <summary>
+            批量添加功能菜单
+            </summary>
+            <param name="menuFunctionInputDto">输入DTO</param>
+            <returns></returns>
+        </member>
+        <member name="M:Destiny.Core.Flow.API.Controllers.MenuFunctionController.BatchDeleteMenuFunctionAsync(Destiny.Core.Flow.Dtos.Menu.MenuFunctionInputDto)">
+            <summary>
+            批量删除功能菜单
+            </summary>
+            <param name="menuFunctionInputDto">输入DTO</param>
+            <returns></returns>
+        </member>
+        <member name="M:Destiny.Core.Flow.API.Controllers.MenuFunctionController.GetMenuFunctionByMenuIdPageAsync(Destiny.Core.Flow.Dtos.MenuFunction.MenuFunctionPageRequestDto)">
+            <summary>
+            根据菜单ID得到菜单功能分页
+            </summary>
+            <param name="request"></param>
             <returns></returns>
         </member>
         <member name="T:Destiny.Core.Flow.API.Controllers.Menu.MenuController">
@@ -223,9 +249,9 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Destiny.Core.Flow.API.Controllers.Menu.MenuController.GetUserMenuTreeAsync">
+        <member name="M:Destiny.Core.Flow.API.Controllers.Menu.MenuController.GetVueDynamicRouterTreeAsync">
             <summary>
-            登录成功之后获取用户菜单树
+            登录成功之后获取Vue动态路由菜单
             </summary>
             <returns></returns>
         </member>
@@ -247,12 +273,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Destiny.Core.Flow.API.Controllers.Menu.MenuController.GetMenuFunctionListAsync(System.Guid)">
-            <summary>
-            异步到菜单功能集合
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Destiny.Core.Flow.API.Controllers.Menu.MenuController.GetMenuPageAsync(Destiny.Core.Flow.Filter.PageRequest)">
             <summary>
             异步得到菜单分页数据（不是树，只是普通表格）
@@ -271,7 +291,7 @@
             组织架构管理
             </summary>
         </member>
-        <member name="M:Destiny.Core.Flow.API.Controllers.Organization.OrganizationController.GetAsync">
+        <member name="M:Destiny.Core.Flow.API.Controllers.Organization.OrganizationController.GetOrganizationTreeAsync">
             <summary>
             获取组织架构
             </summary>
@@ -292,11 +312,25 @@
             <param name="dto"></param>
             <returns></returns>
         </member>
+        <member name="M:Destiny.Core.Flow.API.Controllers.Organization.OrganizationController.LoadFormOrganizationAsync(System.Nullable{System.Guid})">
+            <summary>
+            根据Id获取一个组织架构
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:Destiny.Core.Flow.API.Controllers.Organization.OrganizationController.DeleteAsync(System.Guid)">
             <summary>
             异步删除组织架构
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Destiny.Core.Flow.API.Controllers.Organization.OrganizationController.GetPageOrganizationAsync(Destiny.Core.Flow.Filter.PageRequest)">
+            <summary>
+            异步得到组织架构分页数据
+            </summary>
+            <param name="request"></param>
             <returns></returns>
         </member>
         <member name="T:Destiny.Core.Flow.API.Controllers.PermissionController">
@@ -396,11 +430,24 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Destiny.Core.Flow.API.Controllers.UserController.GetUsersToSelectListItemAsync">
+             <summary>
+            获取所有用户列表
+             </summary>
+             <param name="dto"></param>
+             <returns></returns>
+        </member>
         <member name="M:Destiny.Core.Flow.API.Controllers.UserController.GetUserPageAsync(Destiny.Core.Flow.Filter.PageRequest)">
             <summary>
             异步得到分页
             </summary>
             <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Destiny.Core.Flow.API.Controllers.UserController.GetUsersAsync">
+            <summary>
+            异步得到所有用户
+            </summary>
             <returns></returns>
         </member>
         <member name="M:Destiny.Core.Flow.API.Startups.EntityFrameworkCoreMySqlModule.ReadAllText(Microsoft.Extensions.FileProviders.IFileInfo)">

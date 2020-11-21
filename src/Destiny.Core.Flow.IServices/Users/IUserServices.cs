@@ -1,9 +1,12 @@
 ﻿using Destiny.Core.Flow.Dependency;
 using Destiny.Core.Flow.Dtos;
+using Destiny.Core.Flow.Dtos.Users;
 using Destiny.Core.Flow.Filter;
 using Destiny.Core.Flow.Filter.Abstract;
 using Destiny.Core.Flow.Ui;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Destiny.Core.Flow.IServices
@@ -51,5 +54,17 @@ namespace Destiny.Core.Flow.IServices
         /// <param name="dto"></param>
         /// <returns></returns>
         Task<OperationResponse> AllocationRoleAsync(UserAllocationRoleInputDto dto);
+
+        /// <summary>
+        /// 异步得到所有用户
+        /// </summary>
+        /// <returns></returns>
+
+        Task<OperationResponse<List<UserOutputListDto>>> GetUsersAsync();
+        /// <summary>
+        /// 得到所有用户并转成下拉
+        /// </summary>
+        /// <returns></returns>
+        Task<OperationResponse<IEnumerable<SelectListItem>>> GetUsersToSelectListItemAsync();
     }
 }

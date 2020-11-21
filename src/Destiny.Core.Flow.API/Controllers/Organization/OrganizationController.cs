@@ -1,8 +1,8 @@
 ﻿using Destiny.Core.Flow.AspNetCore.Api;
 using Destiny.Core.Flow.AspNetCore.Ui;
 using Destiny.Core.Flow.Dtos.Organization;
+using Destiny.Core.Flow.Filter;
 using Destiny.Core.Flow.IServices.Organization;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel;
@@ -14,7 +14,7 @@ namespace Destiny.Core.Flow.API.Controllers.Organization
     /// 组织架构管理
     /// </summary>
     [Description("组织架构管理")]
-    public class OrganizationController : AuthorizeControllerBase
+    public class OrganizationController : AdminControllerBase
     {
         private readonly IOrganizationService _organization;
 
@@ -29,7 +29,7 @@ namespace Destiny.Core.Flow.API.Controllers.Organization
         /// <returns></returns>
         [HttpGet]
         [Description("获取组织架构")]
-        public async Task<TreeModel<OrganizationOutDto>> GetAsync()
+        public async Task<TreeModel<OrganizationOutDto>> GetOrganizationTreeAsync()
         {
 
             var result = await _organization.GetOrganization();
@@ -66,6 +66,18 @@ namespace Destiny.Core.Flow.API.Controllers.Organization
             return (await _organization.UpdateAsync(dto)).ToAjaxResult();
         }
         /// <summary>
+        /// 根据Id获取一个组织架构
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Description("表单加载组织架构")]
+        public async Task<AjaxResult> LoadFormOrganizationAsync([FromQuery] Guid? id)
+        {
+
+            return (await _organization.LoadFormOrganizationAsync(id.Value)).ToAjaxResult();
+        }
+        /// <summary>
         /// 异步删除组织架构
         /// </summary>
         /// <param name="id"></param>
@@ -76,6 +88,17 @@ namespace Destiny.Core.Flow.API.Controllers.Organization
         {
 
             return (await _organization.DeleteAsync(id)).ToAjaxResult();
+        }
+        /// <summary>
+        /// 异步得到组织架构分页数据
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Description("异步得到组织架构分页数据")]
+        public async Task<PageList<OrganizationOutPageListDto>> GetPageOrganizationAsync([FromBody] PageRequest request)
+        {
+            return (await _organization.GetPageOrganizationAsync(request)).ToPageList();
         }
     }
 }
